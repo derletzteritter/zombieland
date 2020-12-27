@@ -6,8 +6,8 @@
   "author": "Chirstopher Gjelten",
   "license": "MIT",
   "scripts": {
-    "build": "webpack --mode production",
-    "watch": "webpack --watch true"
+    "build": "webpack --mode production --color --progress",
+    "watch": "webpack --mode development --progress --watch"
   },
   "devDependencies": {
     "@citizenfx/client": "^1.0.3354-1",
