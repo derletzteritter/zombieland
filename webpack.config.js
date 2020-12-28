@@ -5,7 +5,7 @@ const RemovePlugin = require("remove-files-webpack-plugin");
 const buildPath = path.resolve(process.cwd(), 'dist');
 
 const client = {
-  entry: './src/client/client.ts',
+  entry: './src/client.ts',
 
   module: {
     rules: [
@@ -41,7 +41,7 @@ const client = {
 }
 
 const server = {
-  entry: './src/server/server.ts',
+  entry: './src/server.ts',
 
   module: {
     rules: [
