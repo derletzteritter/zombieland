@@ -4,7 +4,7 @@ import {Entity, PrimaryColumn, Column} from "typeorm";
 export class Players {
  
     @PrimaryColumn({
-      length: 100;
+      length: 100
     })
     identifier: string;
 
@@ -16,5 +16,4 @@ export class Players {
 
     @Column()
     level: number;
-
 }
