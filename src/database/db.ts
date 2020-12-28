@@ -1,35 +1,42 @@
 import "reflect-metadata";
 import { createConnection } from "typeorm";
-import { Players } from "./models/Players";
-import { Squads } from "./models/Squads";
+import { Player } from "./models/Player";
 
-createConnection().then(async connection => {
+await createConnection({
+  url: "mysql://root@localhost/zombieland?",
+  type: 'mysql',
+  host: 'localhost',
+  port: 3306,
+  username: 'root',
+  password: '',
+  database: 'zombieland',
+  synchronize: true,
+  logging: false,
+  entities: [
+    Player
+  ]
+}).then(async connection => {
+
+  // this will be removed
 
     console.log("Inserting a new user into the database...");
-    const user = new Players();
-    user.player_name = "Timber";
-    user.level = 1;
-    user.account = 1500;
-    await connection.manager.save(user);
+    const player = new Player();
 
-    
-    console.log("Saved a new user with id: " + user.identifier);
+    // creates a new player instance
+
+    player.identifier = "34556677";
+    player.player_name = "CrazyKiller123";
+    player.account = 2000;
+    player.level = 1;
+
+    // saving the player
+    await connection.manager.save(player);
+    console.log("Saved a new user with id: " + player.identifier);
 
     console.log("Loading users from the database...");
-    const users = await connection.manager.find(Players);
+    
+    // finding all players and logging then
+    const users = await connection.manager.find(Player);
     console.log("Loaded users: ", users);
-
-
-    const squad = new Squads();
-    squad.squad_name = 'Gang shit';
-    squad.level = 1;
-
-    const newSquads = await connection.getRepository(Squads);
-    newSquads.save(squad);
-
-    const theSquad = newSquads.find();
-    console.log('Loaded squads: ', theSquad)
-
-    console.log("Here you can setup and run express/koa/any other framework.");
 
 }).catch(error => console.log(error));

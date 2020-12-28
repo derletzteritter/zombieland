@@ -1,19 +1,18 @@
 {
   "compilerOptions": {
-    "outDir": "./",
-    "allowJs": true,
-    "strict": true,
-    "module": "es6",
-    "lib": ["ES2017"],
-    "types": ["@types/node", "@citizenfx/server", "@citizenfx/client"],
-    "target": "es6",
-    "moduleResolution": "node",
-    "esModuleInterop": true,
-    "strictNullChecks": false,
-    "noFallthroughCasesInSwitch": true,
-    "experimentalDecorators": true,
-    "emitDecoratorMetadata": true
+   "module": "esnext",
+     "lib": [
+        "es5",
+        "es6",
+     ],
+     "target": "es2017",
+     "moduleResolution": "node",
+     "outDir": "./build",
+     "types": ["@types/node", "@citizenfx/client", "@citizenfx/server"],
+     "emitDecoratorMetadata": true,
+     "experimentalDecorators": true,
+     "sourceMap": false,
+     
   },
-  "include": ["./src/**/*.ts"],
-  "exclude": []
+  "include": ["./src/**/*.ts"]
 }
