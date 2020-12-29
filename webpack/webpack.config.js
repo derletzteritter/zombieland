@@ -4,6 +4,39 @@ const RemovePlugin = require("remove-files-webpack-plugin");
 
 const buildPath = path.resolve(process.cwd(), 'dist');
 
+const client = {
+  entry: "./client/client.ts",
+  module: {
+    rules: [
+      {
+        test: /\.tsx?$/,
+        use: ["ts-loader"],
+        exclude: /node_modules/,
+      },
+    ],
+  },
+  plugins: [
+    new RemovePlugin({
+      before: {
+        include: [path.resolve(buildPath)],
+      },
+      watch: {
+        include: [path.resolve(buildPath)],
+      },
+    }),
+  ],
+  optimization: {
+    minimize: true,
+  },
+  resolve: {
+    extensions: [".tsx", ".ts", ".js"],
+  },
+  output: {
+    filename: "[contenthash].client.js",
+    path: path.resolve(buildPath),
+  },
+};
+
 const server = {
   entry: './server.ts',
 
@@ -28,19 +61,15 @@ const server = {
     })
   ],
   optimization: {
-    minimize: false
+    minimize: true
   },
   resolve: {
     extensions: [".tsx", ".ts", ".js"]
   },
 
-  experiments: {
-    topLevelAwait: true,
-  },
-
   output: {
     path: path.resolve(buildPath),
-    filename: "server.js"
+    filename: "[contenthash].server.js"
   },
   target: "node"
 }
