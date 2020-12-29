@@ -1,18 +1,18 @@
 {
   "compilerOptions": {
-   "module": "esnext",
+   "module": "commonjs",
      "lib": [
-        "es5",
-        "es6",
+        "es2015",
+        "es2017",
      ],
-     "target": "es2017",
+     "target": "es6",
      "moduleResolution": "node",
      "outDir": "./build",
      "types": ["@types/node", "@citizenfx/client", "@citizenfx/server"],
-     "emitDecoratorMetadata": true,
-     "experimentalDecorators": true,
-     "sourceMap": false,
+     "esModuleInterop": true,
+     "resolveJsonModule": true,
      
   },
-  "include": ["./src/**/*.ts"]
+  "include": ["./src/**/*.ts"],
+  "exclude": ["/node_modules"],
 }
