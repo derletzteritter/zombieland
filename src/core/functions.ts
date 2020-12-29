@@ -1,4 +1,5 @@
 import { pool } from '../database/db';
+import { Identifier } from '../typings/player';
 
 interface Player {
   identifier: string;
@@ -18,3 +19,11 @@ RegisterCommand('getplayers', async (source: number, args: string[], raw: string
   const players = await getPlayer();
   console.log(players);
 }, false)
+
+export async function useIdentifier(identifier: string): Promise<string> {
+  const query = "SELECT identifier FROM players WHERE identifier = ?"
+  const [results] = await pool.query(query, [identifier]);
+  const _identifier = <Identifier[]>results;
+  if (_identifier.length === 0) return null;
+  return _identifier[0].identifier;
+}
