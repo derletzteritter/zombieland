@@ -2,5 +2,5 @@ fx_version "adamant"
 game "gta5"
 
 server_script {
-  "dist/*.js"
+  "dist/server.js"
 }
