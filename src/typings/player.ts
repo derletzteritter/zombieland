@@ -7,3 +7,7 @@ export interface Position {
   y: string;
   z: string;
 }
+
+export interface PlayerClass {
+  playerSource: any;
+}
