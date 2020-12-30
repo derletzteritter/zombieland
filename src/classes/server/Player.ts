@@ -1,76 +1,96 @@
 import {pool} from '../../database/db';
-import {PlayerClass} from '../../typings/player';
-import { BasePlayer } from "./BasePlayer";
+import {BasePlayer} from "./BasePlayer";
 
 export class Player extends BasePlayer {
-     playerSource: any;
-     readonly playerName: string;
+	readonly playerName: string;
 
-    constructor(pSource?: any) {
-      super(pSource)
-      this.playerName = GetPlayerName(pSource);
-    }
-
-    // gets the license identifier, no need to really do a db query? or maybe
-    getIdentifier(): string {
-      return GetPlayerIdentifier(this.playerSource, 1);
-    }
+	constructor(pSource?: any) {
+		super(pSource)
+		this.playerName = GetPlayerName(pSource);
+	}
 
 	/**
-	 * Server side
-	 * @param kickReason The reason for the kick
-    */
-    kick(kickReason: string) {
-      console.log(`${this.playerSource} was kicked for the reason: ${kickReason}`)
-    }
+	 * Get the player name
+	 */
+	getName(): string {
+		return GetPlayerName(this.playerSource)
+	}
 
-    getName(): string {
-      return GetPlayerName(this.playerSource)
-    }
+	/**
+	 * Save the players position
+	 *
+	 * Async Function
+	 * @param x
+	 * @param y
+	 * @param z
+	 */
+	async savePosition(x, y, z) {
+		const query = "UPDATE players SET position = '{?, ?, ?}'";
+		await pool.query(query, [x, y, z])
+	}
 
-    async savePosition(x, y, z) {
-      const query = "UPDATE players SET position = '{?, ?, ?}'";
-      await pool.query(query, [x, y, z])
-    }
+	/**
+	 * Async function
+	 */
+	async getPosition(): Promise<object> {
+		const identifier = this.getIdentifier()
 
-    async getPosition() {
-      const identifier = this.getIdentifier()
+		const query = 'SELECT position FROM players WHERE identifier = ?';
+		const [results] = await pool.query(query, [identifier])
 
-      const query = 'SELECT position FROM players WHERE identifier = ?';
-      const [results] = await pool.query(query, [identifier])
+		console.log('Player name: ', this.getName());
 
-      console.log('Player name: ', this.getName());
+		return JSON.parse(results[0].position);
+	}
 
-      return JSON.parse(results[0].postion);
-    }
+	// INVENTORY
+	/**
+	 * Gives weapon to the ped or source
+	 * @param weaponName Weapon name
+	 * @param ammoCount Ammo count for current weapon
+	 */
+	giveWeapon(weaponName: string, ammoCount: number) {
+		GiveWeaponToPed(GetPlayerPed(this.playerSource), GetHashKey(weaponName), ammoCount, false, true);
+	}
 
-    // INVENTORY
-    /**
-     * Gives weapon to the ped or source
-     * @param weaponName Weapon name
-     * @param ammoCount Ammo count for current weapon
-     */
-    giveWeapon(weaponName: string, ammoCount: number) {
-      GiveWeaponToPed(GetPlayerPed(this.playerSource), GetHashKey(weaponName), ammoCount, false, true);
-    }
-    
+	// ACCOUNT
 
-    // ACCOUNT
-    async addMoney(amount: number) {
-      const identifier = this.getIdentifier()
-      const query = 'UPDATE players SET account = ? WHERE identifier = ?';
-      await pool.query(query, [amount, identifier])
-    }
+	/**
+	 * Get the player current balance
+	 *
+	 * Async function
+	 */
+	async getMoney(): Promise<number> {
+	  const identifier = this.getIdentifier();
 
-    getMoney(): number {
-      return 
-    }
+	  const query = 'SELECT account FROM players WHERE identifier = ?';
+	  const [result] = await pool.query(query, [identifier]);
+
+	  return result[0].account;
+	}
+
+	/**
+	 * Adds new balance to the player
+	 *
+	 * Async function
+	 * @param amount
+	 */
+	async addMoney(amount: number) {
+		const currentMoney = await this.getMoney()
+		const identifier = this.getIdentifier()
+
+		const newBalance = currentMoney + amount
+		const query = 'UPDATE players SET account = ? WHERE identifier = ?';
+		await pool.query(query, [newBalance, identifier])
+	}
 }
 
 
-
 export const ZBPlayer = {
-  fromId: (source) => new Player(source)
+	fromId: (source) => new Player(source),
+	kick: (playerToKick, kickReason: string) => {
+		DropPlayer(playerToKick, kickReason)
+	}
 }
 
 
