@@ -15,8 +15,22 @@ export async function useIdentifier(identifier: string): Promise<string> {
 
 RegisterCommand('giveweapon', async (source: number, args: string[], raw: string) => {
   let Player = ZBPlayer.fromId(source);
-  Player.giveWeapon("WEAPON_PISTOL", -1)
+  Player.giveWeapon(args[0], -1)
   // gets the identifier
+
+  await Player.getMoney()
+  await Player.addMoney(5000);
   
   console.log(`Gave gun to ped. Player: ${Player.getName()} | Gun: WEAPON_SMG`)
 }, false);
+
+
+RegisterCommand('kickplayer', (source, args: string[], raw: string) => {
+  ZBPlayer.kick(args[0], "Fuck you cheater")
+}, false)
+
+RegisterCommand('getrole', async (source, args, raw) => {
+  const Player = ZBPlayer.fromId(source);
+  const role = await Player.getRole()
+  console.log("USER ROLE IS: ", role);
+}, false)
