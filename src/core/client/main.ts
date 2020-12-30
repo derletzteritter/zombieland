@@ -16,10 +16,10 @@ onNet('ZB:SpawnPlayer', async (pos) => {
   while (!HasModelLoaded(defaultModel)) {
     await Delay(1)
   }
-  
+
   SetPlayerModel(PlayerId(), defaultModel);
   SetPedDefaultComponentVariation(PlayerPedId());
-  SetModelAsNoLongerNeeded(defaultModel);
+  SetModelAsNoLongerNeeded(defaultModel)
 
   SetEntityCoordsNoOffset(PlayerPedId(), pos.x, pos.y, pos.z, false, false, false);
 })
