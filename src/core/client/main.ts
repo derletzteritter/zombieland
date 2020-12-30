@@ -9,6 +9,8 @@ on('playerSpawned', () => {
 
 onNet('ZB:SpawnPlayer', async (pos) => {
   await Delay(1);
+
+  console.log("Straight up gang shit")
   
   const defaultModel = GetHashKey("mp_m_freemode_01");
   RequestModel(defaultModel)
@@ -22,8 +24,12 @@ onNet('ZB:SpawnPlayer', async (pos) => {
   SetModelAsNoLongerNeeded(defaultModel)
 
   SetEntityCoordsNoOffset(PlayerPedId(), pos.x, pos.y, pos.z, false, false, false);
-})
 
-RegisterCommand('getcoords', () => {
-  console.log(GetEntityCoords(PlayerId()))
-}, false)
+
+  // NPCS and PVP
+  SetCanAttackFriendly(PlayerPedId(), true, false)
+  NetworkSetFriendlyFireOption(true)
+
+  ClearPlayerWantedLevel(PlayerId())
+  SetMaxWantedLevel(0)
+})
