@@ -4,4 +4,5 @@ import './src/core/server/server';
 import './src/core/server/functions';
 import './src/typings/player';
 import './src/classes/server/Player';
+import './src/classes/server/BasePlayer';
 import './src/core/server/spawn';
