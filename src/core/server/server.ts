@@ -1,15 +1,15 @@
 import { useIdentifier } from './functions';
-import { ZBPlayer } from '../../classes/server/Player';
+import { BasePlayer } from '../../classes/server/BasePlayer';
 
 
 on('playerConnecting', async (name: string, kickReason: string, deferrals: any) => {
 
   // gets the source and and the "id"
-  // fromId just return a new instance of the Player class
+  // fromId just returns a new instance of the Player class
   const playerSource = (global as any).source
-  let player = ZBPlayer.fromId(playerSource)
+  let Player = new BasePlayer(playerSource)
 
-  let licenseIdentifer = null;
+  let licenseIdentifier = null;
 
   await setTimeout(async () => {
     for (let i = 0; i < GetNumPlayerIdentifiers(playerSource); i++) {
@@ -17,17 +17,17 @@ on('playerConnecting', async (name: string, kickReason: string, deferrals: any) 
       console.log(identifiers);
   
       if (identifiers.includes('license')) {
-        licenseIdentifer = identifiers;
+        licenseIdentifier = identifiers;
       }
     }
 
-    const identifier = await useIdentifier(licenseIdentifer)
+    const identifier = await useIdentifier(licenseIdentifier)
 
     // checking if the player exists, if not create one
     if (identifier === null) {
       console.log("User does not exist");
 
-      await player.create(licenseIdentifer, name)
+      await Player.create(licenseIdentifier, name)
     } else {
       console.log(`User: ${name} | Identifier: ${identifier}, has joined`)
     }

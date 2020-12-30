@@ -1,30 +1,31 @@
-import { spawn } from 'child_process';
-import { pool } from '../../database/db';
-import { Position } from '../../typings/player';
+import {pool} from '../../database/db';
+import {PlayerClass} from '../../typings/player';
+import { BasePlayer } from "./BasePlayer";
 
-export class Player {
-    playerSource: any;
+export class Player extends BasePlayer {
+     playerSource: any;
+     readonly playerName: string;
 
     constructor(pSource?: any) {
-      this.playerSource = pSource;
+      super(pSource)
+      this.playerName = GetPlayerName(pSource);
     }
 
-    /**
-     * Creates a new player
-     * @param identifer The player identifier - license
-     * @param playerName The player name
-     */
-    async create(identifer: string, playerName: string) {
-      const query = 'INSERT INTO players (identifier, player_name) VALUES (?, ?)';
-      await pool.query(query, [identifer, playerName]);
-
-      console.log(`Created user with license: ${identifer} and name: ${playerName}`)
+    // gets the license identifier, no need to really do a db query? or maybe
+    getIdentifier(): string {
+      return GetPlayerIdentifier(this.playerSource, 1);
     }
 
-    // gets the license identifier, no need to really do a db query? or maybe🤷‍♂️
-    getIdentifier() {
-      const identifer = GetPlayerIdentifier(this.playerSource, 1)
-      return identifer;
+	/**
+	 * Server side
+	 * @param kickReason The reason for the kick
+    */
+    kick(kickReason: string) {
+      console.log(`${this.playerSource} was kicked for the reason: ${kickReason}`)
+    }
+
+    getName(): string {
+      return GetPlayerName(this.playerSource)
     }
 
     async savePosition(x, y, z) {
@@ -34,25 +35,16 @@ export class Player {
 
     async getPosition() {
       const identifier = this.getIdentifier()
+
       const query = 'SELECT position FROM players WHERE identifier = ?';
       const [results] = await pool.query(query, [identifier])
 
-      const positions = results;
-      const spawnPos = JSON.parse(positions[0].position)
+      console.log('Player name: ', this.getName());
 
-      return spawnPos;
+      return JSON.parse(results[0].postion);
     }
 
-    /**
-     * Server side
-     * @param kickReason The reason for the kick
-     */
-    kick(kickReason: string) {
-      console.log(`${this.playerSource} was kicked for the reason: ${kickReason}`)
-    }
-
-    // INVENTORY 
-
+    // INVENTORY
     /**
      * Gives weapon to the ped or source
      * @param weaponName Weapon name
@@ -70,17 +62,16 @@ export class Player {
       await pool.query(query, [amount, identifier])
     }
 
-    getMoney() {
-      
+    getMoney(): number {
+      return 
     }
 }
 
 
 
 export const ZBPlayer = {
-  fromId: (source) => {
-    return new Player(source);
-  }
-};
+  fromId: (source) => new Player(source)
+}
+
 
 
