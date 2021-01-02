@@ -21,7 +21,7 @@ RegisterCommand('giveweapon', async (source: number, args: string[], raw: string
   await Player.getMoney()
   await Player.addMoney(5000);
   
-  console.log(`Gave gun to ped. Player: ${Player.getName()} | Gun: WEAPON_SMG`)
+  console.log(`Gave gun to ped. Player: ${Player.getName()} | Gun: ${args[0]}`)
 }, false);
 
 
@@ -34,3 +34,11 @@ RegisterCommand('getrole', async (source, args, raw) => {
   const role = await Player.getRole()
   console.log("USER ROLE IS: ", role);
 }, false)
+
+RegisterCommand('setpos', async (source) => {
+  const [x, y, z] = GetEntityCoords(GetPlayerPed(source));
+  const Player = ZBPlayer.fromId(source);
+  await Player.savePosition(x, y, z);
+}, false);
+
+

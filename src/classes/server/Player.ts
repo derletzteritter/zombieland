@@ -25,22 +25,34 @@ export class Player extends BasePlayer {
 	 * @param z
 	 */
 	async savePosition(x, y, z) {
-		const query = "UPDATE players SET position = '{?, ?, ?}'";
-		await pool.query(query, [x, y, z])
+
+    const position = {
+      x: x,
+      y: y,
+      z: z
+
+    }
+
+    
+
+    const query = "UPDATE players SET position = ?";
+    const newPos = JSON.stringify(position)
+    console.log(newPos)
+		await pool.query(query, [newPos])
 	}
 
 	/**
 	 * Async function
 	 */
-	async getPosition(): Promise<object> {
+	async getPosition() {
 		const identifier = this.getIdentifier()
 
 		const query = 'SELECT position FROM players WHERE identifier = ?';
 		const [results] = await pool.query(query, [identifier])
 
-		console.log('Player name: ', this.getName());
-
-		return JSON.parse(results[0].position);
+    console.log('Player name: ', this.getName());
+    
+    return JSON.parse(results[0].position)
 	}
 
 	// INVENTORY
@@ -90,7 +102,8 @@ export const ZBPlayer = {
 	fromId: (source) => new Player(source),
 	kick: (playerToKick, kickReason: string) => {
 		DropPlayer(playerToKick, kickReason)
-	}
+	},
+
 }
 
 

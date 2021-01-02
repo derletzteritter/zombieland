@@ -1,6 +1,6 @@
 // spawning 
 
-import { Delay } from "../../utils/fivem";
+import { Delay } from '../../utils/fivem';
 
 on('playerSpawned', () => {
   emitNet('ZB:PlayerSpawned')
@@ -9,8 +9,6 @@ on('playerSpawned', () => {
 
 onNet('ZB:SpawnPlayer', async (pos) => {
   await Delay(1);
-
-  console.log("Straight up gang shit")
   
   const defaultModel = GetHashKey("mp_m_freemode_01");
   RequestModel(defaultModel)
@@ -22,6 +20,7 @@ onNet('ZB:SpawnPlayer', async (pos) => {
   SetPlayerModel(PlayerId(), defaultModel);
   SetPedDefaultComponentVariation(PlayerPedId());
   SetModelAsNoLongerNeeded(defaultModel)
+
 
   SetEntityCoordsNoOffset(PlayerPedId(), pos.x, pos.y, pos.z, false, false, false);
 

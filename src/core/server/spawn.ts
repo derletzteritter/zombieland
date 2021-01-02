@@ -1,5 +1,4 @@
 import { ZBPlayer } from "../../classes/server/Player";
-import { Delay } from "../../utils/fivem";
 
 onNet('ZB:PlayerSpawned', async () => {
   const _source = (global as any).source;
@@ -10,4 +9,19 @@ onNet('ZB:PlayerSpawned', async () => {
   const pos = await player.getPosition()
   console.log("SPAWN POSITION: ", pos)
   emitNet('ZB:SpawnPlayer', _source, pos)
+})
+
+
+on('playerDropped', async () => {
+  const _source = (global as any).source;
+  console.log(`Player ${GetPlayerName(_source)} disconnected`);
+
+  const Player = ZBPlayer.fromId(_source);
+
+  const [x, y, z] = GetEntityCoords(GetPlayerPed(_source));
+  console.log('Current location: ', x, y, z)
+
+  // update position
+  await Player.savePosition(x, y, z);
+
 })
