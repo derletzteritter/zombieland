@@ -24,7 +24,8 @@ export class BasePlayer {
 	}
 
 	async getRole(): Promise<string> {
-		const identifier = this.getIdentifier()
+    const identifier = this.getIdentifier()
+    
 		const [result] = await pool.query('SELECT role FROM players WHERE identifier = ?', [identifier]);
 		return result[0].role;
 	}

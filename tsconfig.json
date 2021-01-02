@@ -1,17 +1,15 @@
 {
   "compilerOptions": {
-   "module": "commonjs",
-     "lib": [
-        "es2015",
-        "es2017",
-     ],
-     "target": "es6",
+    "module": "es6",
+    "target": "es6",
+    "allowJs": true,
+    "lib": ["es2017"],
      "moduleResolution": "node",
      "outDir": "./build",
      "types": ["@types/node", "@citizenfx/client", "@citizenfx/server"],
      "esModuleInterop": true,
      "resolveJsonModule": true,
-     
+    "allowSyntheticDefaultImports": true
   },
   "include": ["./src/**/*.ts"],
   "exclude": ["/node_modules"],

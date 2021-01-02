@@ -14,8 +14,7 @@ on('playerConnecting', async (name: string, kickReason: string, deferrals: any) 
   await setTimeout(async () => {
     for (let i = 0; i < GetNumPlayerIdentifiers(playerSource); i++) {
       const identifiers = GetPlayerIdentifier(playerSource, i);
-      console.log(identifiers);
-  
+
       if (identifiers.includes('license')) {
         licenseIdentifier = identifiers;
       }
@@ -31,7 +30,6 @@ on('playerConnecting', async (name: string, kickReason: string, deferrals: any) 
     } else {
       console.log(`User: ${name} | Identifier: ${identifier}, has joined`)
     }
-
 
   }, 0)
 })

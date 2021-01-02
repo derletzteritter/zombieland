@@ -25,19 +25,15 @@ export class Player extends BasePlayer {
 	 * @param z
 	 */
 	async savePosition(x, y, z) {
-
     const position = {
       x: x,
       y: y,
       z: z
-
     }
-
-    
 
     const query = "UPDATE players SET position = ?";
     const newPos = JSON.stringify(position)
-    console.log(newPos)
+
 		await pool.query(query, [newPos])
 	}
 
@@ -49,8 +45,6 @@ export class Player extends BasePlayer {
 
 		const query = 'SELECT position FROM players WHERE identifier = ?';
 		const [results] = await pool.query(query, [identifier])
-
-    console.log('Player name: ', this.getName());
     
     return JSON.parse(results[0].position)
 	}
