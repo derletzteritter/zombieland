@@ -20,7 +20,7 @@
    },
    "scripts": {
       "start": "node dist/server.js",
-      "watch": "webpack --config webpack/webpack.config.js --mode development --watch",
-      "build": "webpack --config webpack/webpack.config.js --mode production --color --progress"
+      "watch": "webpack --watch",
+      "build": "webpack --mode production"
    }
 }
